@@ -5,9 +5,8 @@ import javax.swing.SwingWorker;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
 
-class Worker extends SwingWorker<Void, String> {
+class Worker extends SwingWorker<Void, Void> {
 
     private final Appzard appzard;
     private final JButton button;
@@ -54,12 +53,7 @@ class Worker extends SwingWorker<Void, String> {
         reader.close();
 
         appzard.logs = logs.toString();
-        publish("");
+        publish();
         return null;
-    }
-
-    @Override
-    protected void process(List<String> chunks) {
-        // what to do here?
     }
 }

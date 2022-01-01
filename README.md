@@ -3,8 +3,14 @@ A simple GUI that lets you do some simple things that maybe difficult for some u
 ![screenshot](images/screenshot.png)
 
 - Initialize - Initialize Appzard
-- Kill Instance - Force stops Appzard Instance
-- Logs (yeah also this one, not a big thing)
+- Kill Instance - Force stops Appzard
+- Install Appzard Directly and add Path to Environment variables directly
+
+### Installation
+
+Click on 'More' menu and click 'Install Appzard'.
+<br>
+You can also add Path to system variables from the button.
 
 <hr>
 

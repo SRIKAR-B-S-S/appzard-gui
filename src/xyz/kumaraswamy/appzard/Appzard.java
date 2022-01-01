@@ -2,11 +2,9 @@ package xyz.kumaraswamy.appzard;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -19,18 +17,18 @@ import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 
-public class Appzard {
+import static xyz.kumaraswamy.appzard.Tools.setTopMargin;
 
-    private final JFrame frame = new JFrame("Appzard");
-    private final JPanel panel = new JPanel();
+public class Appzard extends JFrame {
+
+    public final JPanel panel = new JPanel();
+    public final Box vertical;
 
     private JButton initializeBtn = null;
 
@@ -45,9 +43,10 @@ public class Appzard {
     }
 
     public Appzard() {
-        frame.setJMenuBar(createMenuBar());
+        setTitle("Appzard");
+        setJMenuBar(createMenuBar());
 
-        Box vertical = Box.createVerticalBox();
+        vertical = Box.createVerticalBox();
         setTopMargin(vertical);
 
         Box operationBox = Box.createHorizontalBox();
@@ -56,7 +55,7 @@ public class Appzard {
                     initializeBtn = this;
                     addActionListener(e -> {
                         setText("Initializing");
-                        SwingWorker<Void, String> worker = new Worker(
+                        SwingWorker<Void, Void> worker = new Worker(
                                 Appzard.this, this);
                         worker.execute();
                     });
@@ -105,6 +104,10 @@ public class Appzard {
 
         panel.add(vertical);
         showGUIFrame();
+
+        // for testing purpose only
+        Installation installation = new Installation(this);
+        installation.install();
     }
 
     private void browseURL(String url) {
@@ -169,45 +172,35 @@ public class Appzard {
         return "<....>";
     }
 
-    private void setTopMargin(JComponent component) {
-        component.setBorder(BorderFactory.createEmptyBorder(20,
-                10, 10, 10));
-    }
-
     private void showGUIFrame() {
-        frame.add(panel);
-        frame.setSize(700, 500);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        add(panel);
+        setSize(700, 500);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
     }
 
     private JMenu createEditMenu() {
         return new JMenu("More") {{
-            JMenuItem communityItem = new JMenuItem("Community");
-            communityItem.addMouseListener(new MouseListener() {
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    browseURL("https://community.appzard.com");
-                }
-
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                }
-
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-                }
-            });
-            add(communityItem);
+            add(
+                    new JMenuItem("Community") {{
+                        addMouseListener(new MouseClickListener() {
+                            @Override
+                            public void whenClick() {
+                                browseURL("https://community.appzard.com");
+                            }
+                        });
+                    }});
+            add(
+                    new JMenuItem("Install Appzard") {{
+                        addMouseListener(new MouseClickListener() {
+                            @Override
+                            public void whenClick() {
+                                Installation installation = new Installation(Appzard.this);
+                                installation.install();
+                            }
+                        });
+                    }});
         }};
     }
 
