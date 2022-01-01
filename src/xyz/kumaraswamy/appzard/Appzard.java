@@ -106,8 +106,6 @@ public class Appzard extends JFrame {
         showGUIFrame();
 
         // for testing purpose only
-        Installation installation = new Installation(this);
-        installation.install();
     }
 
     private void browseURL(String url) {
